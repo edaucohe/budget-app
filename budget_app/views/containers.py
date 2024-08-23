@@ -8,6 +8,7 @@ from budget_app.helpers.const import LABEL_ORIENTATION, LABEL_PAD_X, \
     BUTTON_PAD_X, BUTTON_PAD_Y, COMBO_ORIENTATION
 from budget_app.helpers.my_enums import Category, Account, Currency, \
     TransactionType
+# from budget_app.models import Tag
 
 
 class TransactionContainer(ttk.Frame):
@@ -15,6 +16,9 @@ class TransactionContainer(ttk.Frame):
 
     def __init__(self, parent):
         super().__init__(parent)
+
+        # tag = Tag()
+        # self.tags = tag.tags
 
         # ---- Setup grid of GUI ---- #
         self.grid_columnconfigure(index=0, weight=0)
@@ -129,14 +133,29 @@ class TransactionContainer(ttk.Frame):
                                  padx=LABEL_PAD_X,
                                  pady=LABEL_PAD_Y)
 
-        # note widget
+        # Tag widgets
+        self.tag_label = \
+            ttk.Label(self, text="Etiqueta")
+        self.tag_label.grid(row=8, column=0,
+                            sticky=LABEL_ORIENTATION,
+                            padx=LABEL_PAD_X,
+                            pady=LABEL_PAD_Y)
+        self.tag_input = \
+            ttk.Combobox(self, values=["yes"])
+        self.tag_input.current()  # Set FIXED as default value
+        self.tag_input.grid(row=8, column=1,
+                            sticky=COMBO_ORIENTATION,
+                            padx=LABEL_PAD_X,
+                            pady=LABEL_PAD_Y)
+
+        # Note widget
         self.note_label = ttk.Label(self, text="Nota")
-        self.note_label.grid(row=8, column=0,
+        self.note_label.grid(row=9, column=0,
                              sticky=LABEL_ORIENTATION,
                              padx=LABEL_PAD_X,
                              pady=LABEL_PAD_Y)
         self.note_input = tk.Text(self, height=4, width=30)
-        self.note_input.grid(row=8, column=1,
+        self.note_input.grid(row=9, column=1,
                              sticky=ENTRY_ORIENTATION,
                              padx=LABEL_PAD_X,
                              pady=LABEL_PAD_Y)
@@ -319,10 +338,10 @@ class TagContainer(ttk.Frame):
                              pady=(LARGE_PAD_Y_TOP, 0))
 
         # Create button (just for the example)
-        self.add_tag_button = \
+        self.add_tag_btn = \
             ttk.Button(master=self, text="Ingresar etiqueta")
-        self.add_tag_button.grid(row=12,
-                                 column=1,
-                                 sticky=BUTTON_ORIENTATION,
-                                 padx=BUTTON_PAD_X,
-                                 pady=BUTTON_PAD_Y)
+        self.add_tag_btn.grid(row=12,
+                              column=1,
+                              sticky=BUTTON_ORIENTATION,
+                              padx=BUTTON_PAD_X,
+                              pady=BUTTON_PAD_Y)

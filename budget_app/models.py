@@ -1,3 +1,4 @@
+import datetime
 from datetime import date
 from typing import Optional, Dict
 
@@ -7,10 +8,27 @@ from budget_app.helpers.my_enums import \
 
 class Tag:
     def __init__(self,
-                 name: str,
+                 name: str = "",
                  image: Optional[str] = None):
         self.name = name
-        self.image = image
+        # self.tags = []
+        # self.image = image
+
+    def __repr__(self):
+        return f"Tag(name={repr(self.name)})"
+
+    @classmethod
+    def deserialize(cls, tag_data: Dict[str, str]) -> 'Tag':
+        data = dict()
+        data["name"] = tag_data["name"]
+        print("data from MODEL: ", data)
+        return cls(**data)
+
+    # def list_tags(self, new_tag):
+    #     self.tags.append(new_tag)
+
+    # def get_tags(self):
+    #     return self.tags
 
 
 class Transaction:
@@ -27,29 +45,39 @@ class Transaction:
                  ):
         self.description = description
         self.amount = amount
-        self.type = transaction_type
-        self.account = account
         self.operation_date = operation_date
         self.category = category
+        self.transaction_type = transaction_type
+        self.account = account
         self.currency = currency
         self.tag = tag
         self.note = note
 
-    # def __repr__(self):
-    #     return f"Transaction(description={self.description})"
+    def __repr__(self):
+        return f"Transaction(" \
+               f"description={repr(self.description)}, " \
+               f"amount={repr(self.amount)}, " \
+               f"operation_date={repr(self.operation_date)}, " \
+               f"category={repr(self.category)}, " \
+               f"transaction_type={repr(self.transaction_type)}, " \
+               f"account={repr(self.account)}, " \
+               f"currency={repr(self.currency)}, " \
+               f"tag={repr(self.tag)}, " \
+               f"note={repr(self.note)})"
 
     @classmethod
     def deserialize(cls, transaction_data: Dict[str, str]) -> 'Transaction':
         data = dict()
         data["description"] = transaction_data["description"]
         data["amount"] = cls.to_float(transaction_data["amount"])
-        data["currency"] = Currency(transaction_data["currency"])
-        data["transaction_type"] = \
-            TransactionType(transaction_data["transaction_type"])
         data["operation_date"] = \
             cls.to_date(transaction_data["operation_date"])
-        data["account"] = Account(transaction_data["account"])
         data["category"] = Category(transaction_data["category"])
+        data["transaction_type"] = \
+            TransactionType(transaction_data["transaction_type"])
+        data["account"] = Account(transaction_data["account"])
+        data["currency"] = Currency(transaction_data["currency"])
+        data["tag"] = ""
         data["note"] = transaction_data["note"]
 
         print("data from MODEL: ", data)
@@ -62,7 +90,7 @@ class Transaction:
             return float(amount)
         else:
             print("Amount is not a float")
-            return 0
+            return float(0)
 
     @staticmethod
     def to_date(date_as_str):
